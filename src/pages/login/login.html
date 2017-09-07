@@ -16,16 +16,16 @@
       <ion-list>
        
         <ion-item>
-          <ion-label stacked>Username</ion-label>
-          <ion-input type="text" [(ngModel)]="userData.username"></ion-input>
-        </ion-item>
+    <ion-label fixed>Username</ion-label>
+    <ion-input type="text" value="" [(ngModel)]="userData.username"></ion-input>
+  </ion-item>
 
-        <ion-item>
-          <ion-label stacked>Password</ion-label>
-          <ion-input type="password" [(ngModel)]="userData.password"></ion-input>
-        </ion-item>
+  <ion-item>
+    <ion-label fixed>Password</ion-label>
+    <ion-input type="password" [(ngModel)]="userData.password"></ion-input>
+  </ion-item>
 
-        <button ion-button full color="success" (click)="login()">Sign up</button>
+        <button ion-button full color="success" (click)="login()">Login</button>
         <a href="#" (click)="signup()">Signup Page</a>
       </ion-list>
     </ion-card-content>

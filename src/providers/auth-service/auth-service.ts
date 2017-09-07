@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
-let apiUrl = 'http://localhost/ionic/login/';
+let apiUrl = "http://localhost/ionic/login/";
 
 @Injectable()
 export class AuthServiceProvider {
