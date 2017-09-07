@@ -1,0 +1,33 @@
+
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>welcome</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding id="welcome">
+  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9soAaifwABVoiPF3_qECaDG86d4HcmDOGRDXkI_R6TRwWeNkF7A" class="logo"/>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <h1>Welcome to Your App</h1>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid >
+    <ion-row>
+      <ion-col center text-center>
+        <button ion-button full color="success" (click)="signup()">Sign up</button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col center text-center>
+        <button ion-button full color="lightText" (click)="login()">Log in</button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
