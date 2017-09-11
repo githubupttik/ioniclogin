@@ -12,7 +12,7 @@ import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
 })
 export class SignupPage {
 	responseData : any;
-	userData = {"username": "","password": "", "name": "","email": ""};
+	userData = {"username": "","password": "", "name": "","email": "", "re-password": ""};
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public authService:AuthServiceProvider, public toastCtrl:ToastController) {
@@ -23,7 +23,7 @@ export class SignupPage {
   }
 
 signup(){
-    if(this.userData.username && this.userData.password && this.userData.email && this.userData.name){
+    if(this.userData.username && this.userData.password && this.userData.email && this.userData.name && this.userData.re-password){
       //Api connections
     this.authService.postData(this.userData, "signup").then((result) =>{
     this.responseData = result;
