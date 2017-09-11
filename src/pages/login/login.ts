@@ -33,6 +33,7 @@ responseData : any;
   }
        }, (err) => {
       //Connection failed message
+      this.presentToast("Error");
     });
    }
    else{

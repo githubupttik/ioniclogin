@@ -25,6 +25,7 @@ export class SignupPage {
 signup(){
     if(this.userData.username && this.userData.password && this.userData.email && this.userData.name && this.userData.repassword){
       //Api connections
+	if(this.userData.password == this.userData.repassword){
     this.authService.postData(this.userData, "signup").then((result) =>{
     this.responseData = result;
     console.log(this.responseData);
@@ -32,7 +33,10 @@ signup(){
     this.navCtrl.push(TabsPage);
     }, (err) => {
       //Connection failed message
+      this.presentToast("Error");
     });
+    
+    }else{ this.presentToast("Password Not Match."); }
   }
   else {
     this.presentToast("Give valid information.");

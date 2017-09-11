@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { NavController, App } from 'ionic-angular';
+import { NavController, App, AlertController } from 'ionic-angular';
 import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
+import {CommonProvider} from "../../providers/common/common";
 
 @Component({
   selector: 'page-home',
@@ -8,45 +9,135 @@ import { AuthServiceProvider } from '../../providers/auth-service/auth-service';
 })
 export class HomePage {
 
-userDetails : any;
-responseData: any;
-dataSet : any;
-userPostData = {"user_id":"","token":""};
+ public userDetails : any;
+  public resposeData : any;
+  public dataSet : any;
+  public userPostData = {
+    "user_id": "",
+    "token": "",
+    "feed": "",
+    "feed_id":""
+  };
 
-  constructor(public navCtrl: NavController, public app: App, public authService:AuthServiceProvider) {
+  constructor(public common: CommonProvider, private alertCtrl: AlertController,public navCtrl : NavController, public app : App, public authService : AuthServiceProvider) {
   
   const data = JSON.parse(localStorage.getItem('userData'));
-  this.userDetails = data.userData;
+    this.userDetails = data.userData;
+    this.userPostData.user_id = this.userDetails.user_id;
+    this.userPostData.token = this.userDetails.token;
 
-  this.userPostData.user_id = this.userDetails.user_id;
-  this.userPostData.token = this.userDetails.token;
-  this.getFeed();
+    this.getFeed();
 
   }
   
-  getFeed() {
-    this.authService.postData(this.userPostData, 'feed')
+   getFeed() {
+    this.common.presentLoading();
+    this
+      .authService
+      .postData(this.userPostData, "feed")
       .then((result) => {
-        this.responseData = result;
-        if (this.responseData.feedData) {
-          this.dataSet = this.responseData.feedData;
-        } else {}
-      }, (err) => {
+        this.resposeData = result;
+        if (this.resposeData.feedData) {
+              this.common.closeLoading();
+          this.dataSet = this.resposeData.feedData;
+          console.log(this.dataSet);
 
+        } else {
+          console.log("No access");
+        }
+
+      }, (err) => {
+        //Connection failed message
       });
   }
 
-  convertTime(created) {
-    let date = new Date(created * 1000);
-    return date;
-  }
-  
-  backToWelcome(){
-   const root = this.app.getRootNav();
-   root.popToRoot();
-}
+  feedUpdate() {
+    if (this.userPostData.feed) {
+      this.common.presentLoading();
+       this
+      .authService
+      .postData(this.userPostData, "feedUpdate")
+      .then((result) => {
+        this.resposeData = result;
+        if (this.resposeData.feedData) {
+          this.common.closeLoading();
+          this.dataSet.unshift(this.resposeData.feedData);
+          this.userPostData.feed = "";
+        } else {
+          console.log("No access");
+        }
 
-  logout(){  const root = this.app.getRootNav();  root.popToRoot();
+      }, (err) => {
+        //Connection failed message
+      });
+    }
+
+  }
+
+  feedDelete(feed_id, msgIndex) {
+  
+    if (feed_id > 0) {
+
+
+      let alert = this.alertCtrl.create({
+    title: 'Delete Feed',
+    message: 'Do you want to buy this feed?',
+    buttons: [
+      {
+        text: 'Cancel',
+        role: 'cancel',
+        handler: () => {
+          console.log('Cancel clicked');
+        }
+      },
+      {
+        text: 'Delete',
+        handler: () => {
+           this.userPostData.feed_id = feed_id;
+       this
+      .authService
+      .postData(this.userPostData, "feedDelete")
+      .then((result) => {
+        this.resposeData = result;
+        if (this.resposeData.success) {
+        this.dataSet.splice(msgIndex, 1);
+        } else {
+          console.log("No access");
+        }
+
+      }, (err) => {
+        //Connection failed message
+      });
+        }
+      }
+    ]
+  });
+  alert.present();
+
+
+     
+    }
+
+  }
+
+  converTime(time) {
+    let a = new Date(time * 1000);
+    return a;
+  }
+
+  backToWelcome() {
+    const root = this
+      .app
+      .getRootNav();
+    root.popToRoot();
+  }
+
+  logout() {
+    //Api Token Logout
+
+    localStorage.clear();
+    setTimeout(() => this.backToWelcome(), 1000);
+
   }
 
 }
